@@ -70,3 +70,5 @@ Results on a slighty newer laptop (i7-4850HQ CPU @ 2.30GHz) with AVX:
 * Stock (libc or compiler-provided) memset is better for larger buffer sizes if it can take advantage of AVX/AVX2. My versions use only SSE so in this case they loose.
 * Stock (libc or compiler-provided) memset is unreasonably bad for small buffer sizes.
 * Surprisingly on newer CPUs the very old and suposedly outdated `rep; stosb` method has become more efficient for larger buffer sizes. But for very small sizes it is just terrible. Weird. Perhaps it's just Haswell. Hope it is fixed on newer CPUs.
+* Either me or the compiler failed to use intrinsics efficiently, the hand-coded assembly produced much better results.
+* The versions `bzero_6` and `bzero_7` seem good enough to be used as a replacement for stock memset if larger buffers are not a concern. Or if AVX support is added.
