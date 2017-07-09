@@ -5,14 +5,12 @@
 
 #include <nmmintrin.h>
 
-//#define SIZE (128)
-#define SIZE (255)
+#define MAXSIZE (512)
 
 #define PADDING	(32)
+#define PADDED_SIZE(size) (size + PADDING + PADDING)
 
-#define PADDED_SIZE (SIZE + PADDING + PADDING)
-
-char data[PADDED_SIZE];
+char data[PADDED_SIZE(MAXSIZE)];
 
 typedef void (*func_t)(char *, size_t);
 
@@ -34,30 +32,59 @@ get_time(void)
 	return tm.tv_sec * 1000000 + tm.tv_usec;
 }
 
-void
-test(const char *name, func_t func)
+uint64_t
+test_size(func_t func, size_t size)
 {
-	memset(data, 0xfa, PADDED_SIZE);
+	size_t padded_size = PADDED_SIZE(size);
+	memset(data, 0xfa, padded_size);
 
 	uint64_t s, f;
 	s = get_time();
 
+	char *just_data = data + PADDING;
 	for (size_t i = 10000; i; i--) {
-		func(data + PADDING, SIZE);
+		func(just_data, size);
 	}
 
 	f = get_time();
-	printf("%s: %llu\n", name, f - s);
 
-	for (int i = 0; i < PADDED_SIZE; i++) {
-		if (i < PADDING || i >= (SIZE + PADDING)) {
-			if (data[i] != (char) 0xfa)
-				printf("%d has no padding! %d\n", i, data[i]);
+	for (int i = 0; i < padded_size; i++) {
+		if (i < PADDING || i >= (size + PADDING)) {
+			if (data[i] != (char) 0xfa) {
+				printf("\n%d has no padding! %d\n", i, data[i]);
+				exit(1);
+			}
 		} else {
-			if (data[i] != 0)
-				printf("%d has no zero!\n", i);
+			if (data[i] != 0) {
+				printf("\n%d has no zero!\n", i);
+				exit(1);
+			}
 		}
 	}
+
+	return f - s;
+}
+
+void
+test(const char *name, func_t func)
+{
+	unsigned t0 = test_size(func, 0);
+	unsigned t1 = test_size(func, 1);
+	unsigned t2 = test_size(func, 2);
+	printf("%s:\n0=%u 1=%u 2=%u", name, t0, t1, t2);
+
+	for (int i = 4; i < MAXSIZE; i *= 2) {
+		int i3 = i - 1, i4 = i, i5 = i + 1;
+		unsigned t3 = test_size(func, i3);
+		unsigned t4 = test_size(func, i4);
+		unsigned t5 = test_size(func, i5);
+		printf(" %d=%u %d=%u %d=%u", i3, t3, i4, t4, i5, t5);
+	}
+
+	int i6 = MAXSIZE - 1, i7 = MAXSIZE;
+	unsigned t6 = test_size(func, i6);
+	unsigned t7 = test_size(func, i7);
+	printf(" %d=%u %d=%u\n\n", i6, t6, i7, t7);
 }
 
 int
