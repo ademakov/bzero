@@ -7,7 +7,7 @@
 #endif
 
 	.text
-//ALIGN
+	ALIGN
 	.globl CNAME(bzero_6)
 CNAME(bzero_6):
 	movq	%rsi, %rdx
@@ -16,8 +16,7 @@ CNAME(bzero_6):
 	pxor	%xmm0, %xmm0
 	cmpq	%rdx, %rdi
 	je	2f
-//
-ALIGN
+	ALIGN
 1:
 	movdqu	%xmm0, (%rdi)
 	addq	$64, %rdi
