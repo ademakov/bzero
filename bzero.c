@@ -35,7 +35,7 @@ bzero_3(char *s, size_t n)
 void
 bzero_4(char *s, const size_t n)
 {
-	char *e = s + (n & ~64);
+	char *e = s + (n & ~63);
 
 	if (s != e) {
 #pragma clang loop unroll(disable)
@@ -114,7 +114,7 @@ bzero_4(char *s, const size_t n)
 void
 bzero_5(char *s, size_t n)
 {
-	char *e = s + (n & ~64);
+	char *e = s + (n & ~63);
 	__m128i zero = _mm_setzero_si128();
 
 	if (s != e) {
