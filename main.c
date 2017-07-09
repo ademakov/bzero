@@ -5,7 +5,7 @@
 
 #include <nmmintrin.h>
 
-#define MAXSIZE (512)
+#define MAXSIZE (2048)
 
 #define PADDING	(32)
 #define PADDED_SIZE(size) (size + PADDING + PADDING)
