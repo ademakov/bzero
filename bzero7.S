@@ -20,7 +20,7 @@ CNAME(bzero_7):
 	je	2f
 	ALIGN
 1:
-	movups	%xmm0, (%rdi)
+	movdqu	%xmm0, (%rdi)
 	addq	$64, %rdi
 	movdqu	%xmm0, -48(%rdi)
 	movdqu	%xmm0, -32(%rdi)
