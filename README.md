@@ -1,5 +1,5 @@
 # bzero
-Some DIY bzero experiments
+## Some DIY bzero experiments
 
 Testing of C bzero versions might be totally off if using `clang -O2` or
 `gcc -O3`. They might totally rewrite C-versions vectorizing stuff or
@@ -65,3 +65,8 @@ Results on a slighty newer laptop (i7-4850HQ CPU @ 2.30GHz) with AVX:
     bzero_0: (memset)
     0=112 1=78 2=79 3=129 4=89 5=84 7=95 8=72 9=69 15=89 16=77 17=74 31=98 32=86 33=83 63=109 64=70 65=70 127=75 128=74 129=75 255=83 256=82 257=83 511=105 512=105 513=106 1023=149 1024=149 1025=149 2047=241 2048=241
 
+## Conclusions
+
+* Stock (libc or compiler-provided) memset is better for larger buffer sizes if it can take advantage of AVX/AVX2. My versions use only SSE so in this case they loose.
+* Stock (libc or compiler-provided) memset is unreasonably bad for small buffer sizes.
+* Surprisingly on newer CPUs the very old and suposedly outdated `rep; stosb` method has become more efficient for larger buffer sizes. But for very small sizes it is just terrible. Weird. Perhaps it's just Haswell. Hope it is fixed on newer CPUs.
