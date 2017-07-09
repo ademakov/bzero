@@ -30,7 +30,7 @@ Resuts on an oldish Xeon (E5520  @ 2.27GHz) w/o AVX:
     bzero_7: (another hand-optimized assembler version with SSE instructions)
     0=42 1=80 2=76 3=73 4=73 5=77 7=67 8=61 9=68 15=149 16=55 17=75 31=63 32=51 33=79 63=67 64=43 65=79 127=83 128=56 129=92 255=99 256=79 257=115 511=151 512=138 513=162 1023=281 1024=261 1025=281 2047=616 2048=552
 
-    bzero_8: (very experimental assembler version with SSE instructions)
+    bzero_8: (very experimental (simplified) assembler version with SSE instructions)
     0=86 1=76 2=80 3=73 4=76 5=67 7=63 8=80 9=71 15=250 16=76 17=67 31=54 32=79 33=71 63=67 64=96 65=89 127=79 128=126 129=115 255=221 256=197 257=188 511=222 512=297 513=310 1023=422 1024=497 1025=489 2047=823 2048=898
 
     bzero_0: (memset)
@@ -59,7 +59,7 @@ Results on a slighty newer laptop (i7-4850HQ CPU @ 2.30GHz) with AVX:
     bzero_7: (another hand-optimized assembler version with SSE instructions)
     0=46 1=50 2=61 3=47 4=64 5=38 7=34 8=33 9=39 15=33 16=29 17=38 31=38 32=23 33=38 63=34 64=26 65=43 127=40 128=29 129=46 255=61 256=51 257=57 511=106 512=98 513=101 1023=198 1024=189 1025=192 2047=381 2048=392
 
-    bzero_8: (very experimental assembler version with SSE instructions)
+    bzero_8: (very experimental (simplified) assembler version with SSE instructions)
     0=77 1=53 2=35 3=65 4=56 5=50 7=30 8=41 9=107 15=26 16=34 17=31 31=29 32=34 33=32 63=35 64=38 65=34 127=41 128=52 129=49 255=61 256=75 257=74 511=106 512=115 513=112 1023=197 1024=189 1025=192 2047=402 2048=410
 
     bzero_0: (memset)
