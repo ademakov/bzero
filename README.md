@@ -2,10 +2,10 @@
 ## Some DIY bzero experiments
 
 Testing of C bzero versions might be totally off if using `clang -O2` or
-`gcc -O3`. They might totally rewrite C-versions vectorizing stuff or
+`gcc -O3`. They might absolutely rewrite C-versions vectorizing stuff or
 replacing it with built-in or libc versions of bzero or memset.
 
-So only `gcc -O2` works as might be naively expected.
+So only `gcc -O2` works as it might be naively expected.
 
 Resuts on an oldish Xeon (E5520  @ 2.27GHz) w/o AVX:
 
