@@ -23,6 +23,7 @@ void bzero_5(char *s, size_t n);
 void bzero_6(char *s, size_t n);
 void bzero_7(char *s, size_t n);
 void bzero_8(char *s, size_t n);
+void bzero_9(char *s, size_t n);
 
 uint64_t
 get_time(void)
@@ -88,18 +89,55 @@ test(const char *name, func_t func)
 }
 
 int
-main()
+main(int ac, char *av[])
 {
-    printf("%p\n", data);
-
-	test("bzero_1", bzero_1);
-	test("bzero_2", bzero_2);
-	test("bzero_3", bzero_3);
-	test("bzero_4", bzero_4);
-	test("bzero_5", bzero_5);
-	test("bzero_6", bzero_6);
-	test("bzero_7", bzero_7);
-	test("bzero_8", bzero_8);
-	test("bzero_0", bzero_0);
+	if (ac < 2) {
+		test("bzero_1", bzero_1);
+		test("bzero_2", bzero_2);
+		test("bzero_3", bzero_3);
+		test("bzero_4", bzero_4);
+		test("bzero_5", bzero_5);
+		test("bzero_6", bzero_6);
+		test("bzero_7", bzero_7);
+		test("bzero_8", bzero_8);
+		test("bzero_9", bzero_9);
+		test("bzero_0", bzero_0);
+	} else {
+		char *s = av[1];
+		for (int c = *s++; c; c = *s++) {
+			switch(c) {
+			case '0':
+				test("bzero_0", bzero_0);
+				break;
+			case '1':
+				test("bzero_1", bzero_1);
+				break;
+			case '2':
+				test("bzero_2", bzero_2);
+				break;
+			case '3':
+				test("bzero_3", bzero_3);
+				break;
+			case '4':
+				test("bzero_4", bzero_4);
+				break;
+			case '5':
+				test("bzero_5", bzero_5);
+				break;
+			case '6':
+				test("bzero_6", bzero_6);
+				break;
+			case '7':
+				test("bzero_7", bzero_7);
+				break;
+			case '8':
+				test("bzero_8", bzero_8);
+				break;
+			case '9':
+				test("bzero_9", bzero_9);
+				break;
+			}
+		}
+	}
 	return 0;
 }
