@@ -78,7 +78,7 @@ CNAME(bzero_A):
 	ret
 9:
 	testl	%eax, %eax
-	jne	4b
+	jne	5b
 	ALIGN
 0:
 	ret
