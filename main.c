@@ -24,6 +24,7 @@ void bzero_6(char *s, size_t n);
 void bzero_7(char *s, size_t n);
 void bzero_8(char *s, size_t n);
 void bzero_9(char *s, size_t n);
+void bzero_A(char *s, size_t n);
 
 uint64_t
 get_time(void)
@@ -101,6 +102,7 @@ main(int ac, char *av[])
 		test("bzero_7", bzero_7);
 		test("bzero_8", bzero_8);
 		test("bzero_9", bzero_9);
+		test("bzero_A", bzero_A);
 		test("bzero_0", bzero_0);
 	} else {
 		char *s = av[1];
@@ -135,6 +137,9 @@ main(int ac, char *av[])
 				break;
 			case '9':
 				test("bzero_9", bzero_9);
+				break;
+			case 'A': case 'a':
+				test("bzero_A", bzero_A);
 				break;
 			}
 		}
