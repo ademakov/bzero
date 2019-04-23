@@ -5,7 +5,7 @@
 
 #include <nmmintrin.h>
 
-#define MAXSIZE (2048)
+#define MAXSIZE (4096)
 
 #define PADDING	(32)
 #define PADDED_SIZE(size) (size + PADDING + PADDING)
@@ -25,6 +25,7 @@ void bzero_7(char *s, size_t n);
 void bzero_8(char *s, size_t n);
 void bzero_9(char *s, size_t n);
 void bzero_A(char *s, size_t n);
+void bzero_B(char *s, size_t n);
 
 uint64_t
 get_time(void)
@@ -70,23 +71,34 @@ test_size(func_t func, size_t size)
 void
 test(const char *name, func_t func)
 {
-	unsigned t0 = test_size(func, 0);
-	unsigned t1 = test_size(func, 1);
-	unsigned t2 = test_size(func, 2);
-	printf("%s:\n0=%u 1=%u 2=%u", name, t0, t1, t2);
+	unsigned i = 0;
 
-	for (int i = 4; i < MAXSIZE; i *= 2) {
-		int i3 = i - 1, i4 = i, i5 = i + 1;
-		unsigned t3 = test_size(func, i3);
-		unsigned t4 = test_size(func, i4);
-		unsigned t5 = test_size(func, i5);
-		printf(" %d=%u %d=%u %d=%u", i3, t3, i4, t4, i5, t5);
+	printf("%s:\n", name);
+	for (; i < 16; i++) {
+		unsigned t = test_size(func, i);
+		printf(" %u=%u", i, t);
+	}
+	printf("\n");
+	for (; i < 32; i++) {
+		unsigned t = test_size(func, i);
+		printf(" %u=%u", i, t);
+	}
+	printf("\n");
+
+	for (i = 32; i < MAXSIZE; i *= 2) {
+		unsigned n[] = { i, i + 1, i + 2, i + 3, i + 4,
+				 i + i/2 - 2, i + i/2 - 1, i + i/2, i + i/2 + 1, i + i/2 + 2,
+				 i*2 - 4, i*2 - 3, i*2 - 2, i*2 - 1 };
+		for (unsigned j = 0; j < sizeof n / sizeof *n; j++) {
+			unsigned k = n[j];
+			unsigned t = test_size(func, k);
+			printf(" %u=%u", k, t);
+		}
+		printf("\n");
 	}
 
-	int i6 = MAXSIZE - 1, i7 = MAXSIZE;
-	unsigned t6 = test_size(func, i6);
-	unsigned t7 = test_size(func, i7);
-	printf(" %d=%u %d=%u\n\n", i6, t6, i7, t7);
+	unsigned t = test_size(func, MAXSIZE);
+	printf(" %d=%u\n\n", MAXSIZE, t);
 }
 
 int
@@ -103,6 +115,7 @@ main(int ac, char *av[])
 		test("bzero_8", bzero_8);
 		test("bzero_9", bzero_9);
 		test("bzero_A", bzero_A);
+		test("bzero_B", bzero_B);
 		test("bzero_0", bzero_0);
 	} else {
 		char *s = av[1];
@@ -140,6 +153,9 @@ main(int ac, char *av[])
 				break;
 			case 'A': case 'a':
 				test("bzero_A", bzero_A);
+				break;
+			case 'B': case 'b':
+				test("bzero_B", bzero_B);
 				break;
 			}
 		}
