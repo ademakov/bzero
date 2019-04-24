@@ -69,11 +69,20 @@ test_size(func_t func, size_t size)
 }
 
 void
-test(const char *name, func_t func)
+test(const char *name, func_t func, unsigned size)
 {
 	unsigned i = 0;
 
 	printf("%s:\n", name);
+	if (size) {
+		for (; i < 32; i++) {
+			unsigned t = test_size(func, size);
+			printf(" %u=%u", size, t);
+		}
+		printf("\n");
+		return;
+	}
+
 	for (; i < 16; i++) {
 		unsigned t = test_size(func, i);
 		printf(" %u=%u", i, t);
@@ -105,57 +114,62 @@ int
 main(int ac, char *av[])
 {
 	if (ac < 2) {
-		test("bzero_1", bzero_1);
-		test("bzero_2", bzero_2);
-		test("bzero_3", bzero_3);
-		test("bzero_4", bzero_4);
-		test("bzero_5", bzero_5);
-		test("bzero_6", bzero_6);
-		test("bzero_7", bzero_7);
-		test("bzero_8", bzero_8);
-		test("bzero_9", bzero_9);
-		test("bzero_A", bzero_A);
-		test("bzero_B", bzero_B);
-		test("bzero_0", bzero_0);
+		test("bzero_1", bzero_1, 0);
+		test("bzero_2", bzero_2, 0);
+		test("bzero_3", bzero_3, 0);
+		test("bzero_4", bzero_4, 0);
+		test("bzero_5", bzero_5, 0);
+		test("bzero_6", bzero_6, 0);
+		test("bzero_7", bzero_7, 0);
+		test("bzero_8", bzero_8, 0);
+		test("bzero_9", bzero_9, 0);
+		test("bzero_A", bzero_A, 0);
+		test("bzero_B", bzero_B, 0);
+		test("bzero_0", bzero_0, 0);
 	} else {
 		char *s = av[1];
+
+		unsigned size = 0;
+		if (ac > 2)
+			size = atoi(av[2]);
+
 		for (int c = *s++; c; c = *s++) {
 			switch(c) {
 			case '0':
-				test("bzero_0", bzero_0);
+				test("bzero_0", bzero_0, size);
 				break;
 			case '1':
-				test("bzero_1", bzero_1);
+				test("bzero_1", bzero_1, size);
 				break;
 			case '2':
-				test("bzero_2", bzero_2);
+				test("bzero_2", bzero_2, size);
 				break;
 			case '3':
-				test("bzero_3", bzero_3);
+				test("bzero_3", bzero_3, size);
 				break;
 			case '4':
-				test("bzero_4", bzero_4);
+				test("bzero_4", bzero_4, size);
 				break;
 			case '5':
-				test("bzero_5", bzero_5);
+				test("bzero_5", bzero_5, size);
 				break;
 			case '6':
-				test("bzero_6", bzero_6);
+				test("bzero_6", bzero_6, size);
 				break;
 			case '7':
-				test("bzero_7", bzero_7);
+				test("bzero_7", bzero_7, size);
 				break;
 			case '8':
-				test("bzero_8", bzero_8);
+				test("bzero_8", bzero_8, size);
 				break;
 			case '9':
-				test("bzero_9", bzero_9);
+				test("bzero_9", bzero_9, size);
 				break;
 			case 'A': case 'a':
-				test("bzero_A", bzero_A);
+				test("bzero_A", bzero_A, size);
 				break;
 			case 'B': case 'b':
-				test("bzero_B", bzero_B);
+				test("bzero_B", bzero_B, size);
 				break;
 			}
 		}
