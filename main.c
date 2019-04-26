@@ -5,7 +5,7 @@
 
 #include <nmmintrin.h>
 
-#define MAXSIZE (4096)
+#define MAXSIZE (8 * 1024)
 
 #define PADDING	(32)
 #define PADDED_SIZE(size) (size + PADDING + PADDING)
@@ -27,6 +27,7 @@ void bzero_9(char *s, size_t n);
 void bzero_A(char *s, size_t n);
 void bzero_B(char *s, size_t n);
 void bzero_C(char *s, size_t n);
+void bzero_D(char *s, size_t n);
 
 uint64_t
 get_time(void)
@@ -52,15 +53,15 @@ test_size(func_t func, size_t size)
 
 	f = get_time();
 
-	for (int i = 0; i < padded_size; i++) {
+	for (size_t i = 0; i < padded_size; i++) {
 		if (i < PADDING || i >= (size + PADDING)) {
 			if (data[i] != (char) 0xfa) {
-				printf("\n%d has no padding! %d\n", i, data[i]);
+				printf("\n%zu: %zu has no padding! %d\n", size, i, data[i]);
 				exit(1);
 			}
 		} else {
 			if (data[i] != 0) {
-				printf("\n%d has no zero!\n", i);
+				printf("\n%zu: %zu has no zero!\n", size, i - PADDING);
 				exit(1);
 			}
 		}
@@ -70,12 +71,12 @@ test_size(func_t func, size_t size)
 }
 
 void
-test(const char *name, func_t func, unsigned size)
+test(const char *name, func_t func, int size)
 {
 	unsigned i = 0;
 
 	printf("%s:\n", name);
-	if (size) {
+	if (size >= 0) {
 		for (; i < 32; i++) {
 			unsigned t = test_size(func, size);
 			printf(" %u=%u", size, t);
@@ -127,13 +128,17 @@ main(int ac, char *av[])
 		test("bzero_A", bzero_A, 0);
 		test("bzero_B", bzero_B, 0);
 		test("bzero_C", bzero_C, 0);
+		test("bzero_D", bzero_D, 0);
 		test("bzero_0", bzero_0, 0);
 	} else {
 		char *s = av[1];
 
-		unsigned size = 0;
-		if (ac > 2)
+		int size = -1;
+		if (ac > 2) {
 			size = atoi(av[2]);
+			if (size > MAXSIZE)
+				size = MAXSIZE;
+		}
 
 		for (int c = *s++; c; c = *s++) {
 			switch(c) {
@@ -175,6 +180,9 @@ main(int ac, char *av[])
 				break;
 			case 'C': case 'c':
 				test("bzero_C", bzero_C, size);
+				break;
+			case 'D': case 'd':
+				test("bzero_D", bzero_D, size);
 				break;
 			}
 		}
