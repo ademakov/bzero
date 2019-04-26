@@ -39,8 +39,8 @@ CNAME(bzero_D):
 	vmovdqu	%xmm0, (%rdi, %rax)
 	ret
 	///
-	/// Take out a block of 64 bytes if any, this might leave
-	/// a tail from 0 to 63 bytes.
+	/// Take out a block of 64 bytes, this might leave a tail
+	/// from 0 to 63 bytes.
 	///
 7:	vmovdqu	%ymm0, (%rdi)
 	addq	$64, %rdi
