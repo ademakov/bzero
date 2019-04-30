@@ -116,20 +116,20 @@ int
 main(int ac, char *av[])
 {
 	if (ac < 2) {
-		test("bzero_1", bzero_1, 0);
-		test("bzero_2", bzero_2, 0);
-		test("bzero_3", bzero_3, 0);
-		test("bzero_4", bzero_4, 0);
-		test("bzero_5", bzero_5, 0);
-		test("bzero_6", bzero_6, 0);
-		test("bzero_7", bzero_7, 0);
-		test("bzero_8", bzero_8, 0);
-		test("bzero_9", bzero_9, 0);
-		test("bzero_A", bzero_A, 0);
-		test("bzero_B", bzero_B, 0);
-		test("bzero_C", bzero_C, 0);
-		test("bzero_D", bzero_D, 0);
-		test("bzero_0", bzero_0, 0);
+		test("bzero_1", bzero_1, -1);
+		test("bzero_2", bzero_2, -1);
+		test("bzero_3", bzero_3, -1);
+		test("bzero_4", bzero_4, -1);
+		test("bzero_5", bzero_5, -1);
+		test("bzero_6", bzero_6, -1);
+		test("bzero_7", bzero_7, -1);
+		test("bzero_8", bzero_8, -1);
+		test("bzero_9", bzero_9, -1);
+		test("bzero_A", bzero_A, -1);
+		test("bzero_B", bzero_B, -1);
+		test("bzero_C", bzero_C, -1);
+		test("bzero_D", bzero_D, -1);
+		test("bzero_0", bzero_0, -1);
 	} else {
 		char *s = av[1];
 
