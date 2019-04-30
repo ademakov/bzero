@@ -94,6 +94,5 @@ CNAME(bzero_D):
 	jne	8b
 	// Handle tails from 0 to 15
 5:	andq	$15, %rax
-	je	0f
 	vmovdqu	%xmm0, -16(%rdi, %rax)
-0:	ret
+	ret
