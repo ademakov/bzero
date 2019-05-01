@@ -51,11 +51,11 @@ CNAME(bzero_E):
 	// Need to handle 2 cases here:
 	// 1. sizes from 16 to 127;
 	// 2. tails from 16 to 127.
-7:	testb	$64, %al
+4:	testb	$64, %al
 	je	5f
 	/// Take out a block of 64 bytes, this might leave a tail
 	/// from 0 to 63 bytes.
-4:	vmovdqu	%ymm0, (%rdi)
+	vmovdqu	%ymm0, (%rdi)
 	addq	$64, %rdi
 	vmovdqu	%ymm0, -32(%rdi)
 	// Filter out tails from 16 to 63
@@ -90,7 +90,7 @@ CNAME(bzero_E):
 	ja	6b
 	// Filter out tails from 16 to 127
 	testb	$112, %al
-	jne	7b
+	jne	4b
 	// Handle tails from 0 to 15
 	andq	$15, %rax
 	vmovdqu	%xmm0, -16(%rdi, %rax)
