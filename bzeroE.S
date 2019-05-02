@@ -43,55 +43,41 @@ CNAME(bzero_E):
 	///
 	/// Handle sizes from 16 and up
 	///
-3:	andq	$-128, %rsi
-	addq	%rdi, %rsi
+3:	andq	$-64, %rsi
 	vpxor	%xmm0, %xmm0, %xmm0
-	cmpq	%rdi, %rsi
-	jne	6f
-	// Need to handle 2 cases here:
-	// 1. sizes from 16 to 127;
-	// 2. tails from 16 to 127.
-4:	testb	$64, %al
-	je	5f
-	/// Take out a block of 64 bytes, this might leave a tail
-	/// from 0 to 63 bytes.
-	vmovdqu	%ymm0, (%rdi)
+	je	6f
+	addq	%rdi, %rsi
+	testb	$64, %al
+	je	4f
+	// Take out a block of 64 bytes, this might leave a tail
+	// from 0 to 63 bytes.
 	addq	$64, %rdi
+	jmp	5f
+	// Take out blocks of 128 bytes.
+	ALIGN
+4:	vmovdqu	%ymm0, (%rdi)
+	addq	$128, %rdi
+	vmovdqu	%ymm0, -96(%rdi)
+5:	vmovdqu	%ymm0, -64(%rdi)
 	vmovdqu	%ymm0, -32(%rdi)
-	// Filter out tails from 16 to 63
-	testb	$48, %al
-	jne	5f
-	// Handle tails from 0 to 15
-	andq	$15, %rax
-	vmovdqu	%xmm0, -16(%rdi, %rax)
+	cmpq	%rdi, %rsi
+	ja	4b
+	testb	$32, %al
+	jne	7f
+	// Handle tails from 0 to 31
+	andq	$31, %rax
+	vmovdqu	%ymm0, -32(%rdi, %rax)
 	ret
-5:	testb	$32, %al
-	jne	5f
-	// Handle sizes or tails from 16 to 31
-	andq	$15, %rax
+	ALIGN
+6:	testb	$32, %al
+	jne	7f
+	// Handle sizes from 16 to 31.
+	andb	$15, %al
 	vmovdqu	%xmm0, (%rdi)
 	vmovdqu	%xmm0, (%rdi, %rax)
 	ret
-	// Handle sizes or tails from 32 to 63.
-5:	andq	$31, %rax
+	// Handle sizes and tails from 32 to 63
+7:	andq	$31, %rax
 	vmovdqu	%ymm0, (%rdi)
 	vmovdqu	%ymm0, (%rdi, %rax)
-	ret
-	///
-	/// For sizes from 128 and up take out blocks of 128 bytes.
-	/// This might leave a tail from 0 to 127 bytes.
-	///
-6:	vmovdqu	%ymm0, (%rdi)
-	addq	$128, %rdi
-	vmovdqu	%ymm0, -96(%rdi)
-	vmovdqu	%ymm0, -64(%rdi)
-	vmovdqu	%ymm0, -32(%rdi)
-	cmpq	%rdi, %rsi
-	ja	6b
-	// Filter out tails from 16 to 127
-	testb	$112, %al
-	jne	4b
-	// Handle tails from 0 to 15
-	andq	$15, %rax
-	vmovdqu	%xmm0, -16(%rdi, %rax)
 	ret
