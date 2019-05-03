@@ -59,20 +59,19 @@ CNAME(bzero_D):
 	testb	$8, %al
 	jne	3f
 	// Handle sizes from 4 to 7
-	andb	$3, %al
 	movl	%edx, (%rdi)
-	movl	%edx, (%rdi, %rax)
+	movl	%edx, -4(%rdi, %rax)
 	ret
 	// Handle sizes from 8 to 15
-3:	andb	$7, %al
-	movq	%rdx, (%rdi)
-	movq	%rdx, (%rdi, %rax)
+3:	movq	%rdx, (%rdi)
+	movq	%rdx, -8(%rdi, %rax)
 	ret
 	// Handle sizes from 0 to 3
 2:	testb	$2, %al
 	je	1f
 	movw	%dx, (%rdi)
-	addq	$2, %rdi
+	movw	%dx, -2(%rdi, %rax)
+	ret
 1:	testb	$1, %al
 	je	0f
 	movb	%dl, (%rdi)
