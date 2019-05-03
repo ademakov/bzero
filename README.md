@@ -72,3 +72,9 @@ Results on a slighty newer laptop (i7-4850HQ CPU @ 2.30GHz) with AVX:
 * Surprisingly on newer CPUs the very old and suposedly outdated `rep; stosb` method has become more efficient for larger buffer sizes. But for very small sizes it is just terrible. Weird. Perhaps it's just Haswell. Hope it is fixed on newer CPUs.
 * Either me or the compiler failed to use intrinsics efficiently, the hand-coded assembly produced much better results.
 * The versions `bzero_6` and `bzero_7` seem good enough to be used as a replacement for stock memset if larger buffers are not a concern. Or if AVX support is added.
+
+## Update
+
+* Added a bunch of new versions that use AVX. These are faster than memset() for any memory size. Well, I didn't test it with AVX-512 CPUs yet.
+* The newest versions are faster for small buffers as well.
+
