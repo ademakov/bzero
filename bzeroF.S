@@ -14,7 +14,7 @@ CNAME(bzero_F):
 	cmpq	$15, %rsi
 	jbe	1f
 	///
-	/// Handle sizes from 16 and up
+	/// Handle sizes from 16 and up.
 	///
 3:	andq	$-64, %rsi
 	vpxor	%xmm0, %xmm0, %xmm0
@@ -37,7 +37,7 @@ CNAME(bzero_F):
 	ja	4b
 	testb	$32, %al
 	jne	7f
-	// Handle tails from 0 to 31
+	// Handle tails from 0 to 31.
 	andq	$31, %rax
 	vmovdqu	%ymm0, -32(%rdi, %rax)
 	ret
@@ -49,13 +49,13 @@ CNAME(bzero_F):
 	vmovdqu	%xmm0, (%rdi)
 	vmovdqu	%xmm0, (%rdi, %rax)
 	ret
-	// Handle sizes and tails from 32 to 63
+	// Handle sizes and tails from 32 to 63.
 7:	andq	$31, %rax
 	vmovdqu	%ymm0, (%rdi)
 	vmovdqu	%ymm0, (%rdi, %rax)
 	ret
 	///
-	/// Handle sizes from 0 to 15
+	/// Handle sizes from 0 to 15.
 	///
 	ALIGN
 1:	xorq	%rdx, %rdx
@@ -63,17 +63,17 @@ CNAME(bzero_F):
 	je	2f
 	testb	$8, %al
 	je	1f
-	// Handle sizes from 8 to 15
+	// Handle sizes from 8 to 15.
 	andb	$7, %al
 	movq	%rdx, (%rdi)
 	movq	%rdx, (%rdi, %rax)
 	ret
-	// Handle sizes from 4 to 7
+	// Handle sizes from 4 to 7.
 1:	andb	$3, %al
 	movl	%edx, (%rdi)
 	movl	%edx, (%rdi, %rax)
 	ret
-	// Handle sizes from 0 to 3
+	// Handle sizes from 0 to 3.
 2:	testb	$2, %al
 	je	2f
 	movw	%dx, (%rdi)
