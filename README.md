@@ -76,5 +76,5 @@ Results on a slighty newer laptop (i7-4850HQ CPU @ 2.30GHz) with AVX:
 ## Update
 
 * Added a bunch of new versions that use AVX. These are faster than memset() for any memory size. Well, I didn't test it with AVX-512 CPUs yet.
-* The newest versions are faster for small buffers as well.
+* The newest versions are faster and more even for small buffers as well.
 
