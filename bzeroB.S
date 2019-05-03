@@ -20,8 +20,7 @@ CNAME(bzero_B):
 	je	2f
 
 	ALIGN
-1:
-	vmovdqu	%ymm0, (%rdi)
+1:	vmovdqu	%ymm0, (%rdi)
 	addq	$128, %rdi
 	vmovdqu	%ymm0, -96(%rdi)
 	vmovdqu	%ymm0, -64(%rdi)
@@ -30,60 +29,47 @@ CNAME(bzero_B):
 	ja	1b
 	testb	$127, %al
 	je	0f
-2:
-	testb	$64, %al
+2:	testb	$64, %al
 	je	3f
 	vmovdqu	%ymm0, (%rdi)
 	vmovdqu	%ymm0, 32(%rdi)
 	testb	$63, %al
 	je	0f
 	addq	$64, %rdi
-3:
-	testb	$32, %al
+3:	testb	$32, %al
 	je	3f
 	andq	$31, %rax
 	vmovdqu	%ymm0, (%rdi)
 	vmovdqu	%ymm0, (%rdi, %rax)
 	ret
-3:
-	testb	$16, %al
+3:	testb	$16, %al
 	je	3f
 	andq	$15, %rax
 	vmovdqu	%xmm0, (%rdi)
 	vmovdqu	%xmm0, (%rdi, %rax)
 	ret
-3:
-	andq	$15, %rax
+3:	andq	$15, %rax
 	vmovdqu	%xmm0, -16(%rdi, %rax)
 	ret
-4:
-	testb	%al, %al
+	nop
+4:	testb	%al, %al
 	jne	4f
 	ret
-4:
-	xorq	%rdx, %rdx
+4:	xorq	%rdx, %rdx
 	testb	$8, %al
 	je	4f
-	andq	$7, %rax
 	movq	%rdx, (%rdi)
-	movq	%rdx, (%rdi, %rax)
+	movq	%rdx, -8(%rdi, %rax)
 	ret
-4:
-	testb	$4, %al
+4:	testb	$4, %al
 	je	4f
-	andq	$3, %rax
 	movl	%edx, (%rdi)
-	movl	%edx, (%rdi, %rax)
+	movl	%edx, -4(%rdi, %rax)
 	ret
-4:
-	testb	$2, %al
+4:	testb	$2, %al
 	je	4f
 	movw	%dx, (%rdi)
-	testb	$1, %al
-	je	0f
-	addq	$2, %rdi
-4:
-	movb	%dl, (%rdi)
-0:
+	movw	%dx, -2(%rdi, %rax)
+0:	ret
+4:	movb	%dl, (%rdi)
 	ret
-
