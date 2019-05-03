@@ -22,20 +22,19 @@ CNAME(bzero_E):
 	testb	$8, %al
 	je	1f
 	// Handle sizes from 8 to 15
-	andb	$7, %al
 	movq	%rdx, (%rdi)
-	movq	%rdx, (%rdi, %rax)
+	movq	%rdx, -8(%rdi, %rax)
 	ret
 	// Handle sizes from 4 to 7
-1:	andb	$3, %al
-	movl	%edx, (%rdi)
-	movl	%edx, (%rdi, %rax)
+1:	movl	%edx, (%rdi)
+	movl	%edx, -4(%rdi, %rax)
 	ret
 	// Handle sizes from 0 to 3
 2:	testb	$2, %al
 	je	2f
 	movw	%dx, (%rdi)
-	addq	$2, %rdi
+	movw	%dx, -2(%rdi, %rax)
+	ret
 2:	testb	$1, %al
 	je	2f
 	movb	%dl, (%rdi)
@@ -72,11 +71,11 @@ CNAME(bzero_E):
 6:	testb	$32, %al
 	jne	7f
 	// Handle sizes from 16 to 31.
-	andb	$15, %al
 	vmovdqu	%xmm0, (%rdi)
-	vmovdqu	%xmm0, (%rdi, %rax)
+	vmovdqu	%xmm0, -16(%rdi, %rax)
 	ret
 	// Handle sizes and tails from 32 to 63
+	ALIGN
 7:	andq	$31, %rax
 	vmovdqu	%ymm0, (%rdi)
 	vmovdqu	%ymm0, (%rdi, %rax)
